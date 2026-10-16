@@ -21,6 +21,20 @@ Python Pandas、Matplotlib
 3.8 2016至2017年每月平均交通流量对比分析
 3.9 每周交通总量分析
 3.10 升采样到每小时查看平均交通流量分布
+## 📊 可视化结果预览
+![每年交通流量总数条形图](result/year_traffic_bar.png)
+
+![按月查看平均交通流量饼图](result/month_traffic_pie.png)
+
+![每日交通流量最大值折线图](result/day_max_traffic_line.png)
+
+![每小时平均交通流量柱状图](result/hour_avg_traffic_bar.png)
+
+![2016‑2017年按月进行交通流量折线图](result/2016_2017_month_compare.png)
+
+![每周交通流量总量折线图](result/week_sum_traffic_line.png)
+
+![每小时总交通流量柱状图](result/resample_hour_sum_bar.png)
 
 ## 运行依赖
 ```bash

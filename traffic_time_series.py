@@ -129,31 +129,29 @@ print("【2016‑2017截取数据前5行】")
 print(df.head(5))
 
 # ===================== 3.8 2016至2017年每月平均交通流量对比分析 =====================
-# resample重采样到月份，取均值（ME替代M）
-df1 = df[["traffic_volume"]].resample(rule='ME', kind='period').mean()
+# resample重采样到月份，取均值
+df1 = df[["traffic_volume"]].resample(rule='ME').mean()
+df1 = df1.to_period(freq='M')
 print("="*70)
 print("【按月重采样均值】")
 print(df1.head(5))
-
 # 拆分2016、2017数据
 y_data = df1[df1.index < '2017-01-01']["traffic_volume"]
 y_data2 = df1[df1.index >= '2017-01-01']["traffic_volume"]
-
 month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 y_data.index = month_names
 y_data2.index = month_names
-
 df2 = pd.concat([y_data, y_data2], axis=1)
 df2.columns = [2016, 2017]
 print("="*70)
 print("【2016‑2017按月对比表】")
 print(df2.head(5))
-
 plt.figure(figsize=(10, 8))
 df2.plot.line(subplots=True, title='2016‑2017年按月进行交通流量折线图')
 plt.tight_layout()
 plt.savefig(os.path.join(BASE_DIR, "result", "2016_2017_month_compare.png"))
 plt.show()
+
 
 # ===================== 3.9 每周交通总量分析 =====================
 week_t = df.resample('W-SUN', closed='right', label='right').sum()
@@ -168,25 +166,23 @@ plt.savefig(os.path.join(BASE_DIR, "result", "week_sum_traffic_line.png"))
 plt.show()
 
 # ===================== 3.10 升采样到每小时查看平均交通流量分布 =====================
-# 升采样H每小时，均值，ffill向前填充空值
-hour_resample = df[['traffic_volume']].resample('H').mean()
+# 升采样h每小时，均值，ffill向前填充空值
+hour_resample = df[['traffic_volume']].resample('h').mean()
 print("="*70)
 print(f"升采样后缺失数目：\n{hour_resample.isnull().sum()}")
-
 hour_t_fill = hour_resample.ffill()
 print("="*70)
 print("【填充后前5行】")
 print(hour_t_fill.head(5))
 print(f"填充后缺失数目：\n{hour_t_fill.isnull().sum()}")
-
 hour_t_fill['hour'] = hour_t_fill.index.hour
 y = hour_t_fill.groupby('hour')['traffic_volume'].sum()
-
 plt.figure(figsize=(10, 6))
 y.plot.bar()
 plt.title('每小时总交通流量柱状图')
 plt.tight_layout()
 plt.savefig(os.path.join(BASE_DIR, "result", "resample_hour_sum_bar.png"))
 plt.show()
+
 
 print("\n✅州际公路交通量时间序列全部分析执行完成！图片输出到result文件夹")
